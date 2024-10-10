@@ -11,5 +11,6 @@ class socket_configure
         {
             return "127.0.0.1";
         }
+        static const int connection_limit = 5;
 };
 #endif
