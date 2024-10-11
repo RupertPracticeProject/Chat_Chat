@@ -6,6 +6,7 @@ using namespace std;
 class socket_configure
 {
     public:
+        static const int message_buffer_size = 1000;
         static const int port = 5555;
         static string get_addr()
         {
