@@ -1,14 +1,35 @@
 #define UNICODE
 #include "socket_configure.h"
-#include <Windows.h>
+#include "super_win.h"
 #include <iostream>
 #include <thread>
+
 using namespace std;
 
 SOCKET soc;
 
 int main()
 {
+    super_win sw;
+    sw.add_button(
+        L"CONNECT"
+    );
+    
+    sw.add_board(
+        L"IP",
+        sw.width*3/20, 
+        sw.height*3/5,
+        sw.width/20, 
+        sw.height/25
+    );
+    sw.add_input(
+        L"",
+        sw.width*1/5, 
+        sw.height*3/5, 
+        sw.width*3/5, 
+        sw.height/25
+    );
+    sw.start();
     WSADATA data;
     ZeroMemory(&data, sizeof(data));
     auto version = MAKEWORD(2,2);
@@ -51,8 +72,8 @@ int main()
     }
 
     char buffer[socket_configure::message_buffer_size] = "Successfully send";
-
+    
     send(soc, buffer, socket_configure::message_buffer_size, 0);
-
+    
     return 0;
 }
