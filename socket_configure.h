@@ -8,6 +8,7 @@ class socket_configure
     public:
         static const int message_buffer_size = 1000;
         static const int port = 5555;
+        static const int ip_length = 30;
         static string get_addr()
         {
             return "127.0.0.1";

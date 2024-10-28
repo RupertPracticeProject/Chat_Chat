@@ -7,8 +7,11 @@ using namespace std;
 
 SOCKET soc;
 
+char message_board[socket_configure::message_buffer_size];
+
 void connection_server(SOCKET * con_soc, int soc_index)
 {
+    
     con_soc[soc_index] = accept(soc, 0, 0);
     if(con_soc[soc_index] == INVALID_SOCKET)
     {
@@ -19,14 +22,40 @@ void connection_server(SOCKET * con_soc, int soc_index)
     }
     char buffer[socket_configure::message_buffer_size];
     recv(con_soc[soc_index], buffer, socket_configure::message_buffer_size, 0);
-    cout << buffer << endl;
-    
+
+    while(true)
+    {
+        recv(con_soc[soc_index], buffer, socket_configure::message_buffer_size, 0);
+        cout << "client<" << soc_index << "> : " << buffer << endl;
+        if(buffer[0] == 'e' && buffer[1] == 'n' && buffer[2] == 'd' && buffer[3] == '\0')
+        {
+            closesocket(con_soc[soc_index]);
+            break;
+        }
+        int buffer_length = string(buffer).length();
+        int message_board_length = string(message_board).length();
+        message_board[message_board_length] = '\r';
+        message_board[message_board_length + 1] = '\n';
+        for(int i = message_board_length + 2, j = 0; j < buffer_length; ++i, ++j)
+        {
+
+            message_board[i] = buffer[j];
+        }
+        for(int i = 0; i < socket_configure::connection_limit; ++i)
+        {
+            send(con_soc[i], message_board, socket_configure::message_buffer_size, 0);
+        }
+    }
 }
 
 
 
 int main()
 {
+    for(int i = 0; i < socket_configure::message_buffer_size; ++i)
+    {
+        message_board[i] = '\0';
+    }
     WSADATA data;
     ZeroMemory(&data, sizeof(data));
     auto version = MAKEWORD(2,2);
