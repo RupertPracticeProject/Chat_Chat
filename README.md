@@ -2,8 +2,6 @@
 
 <br/>
 
-![image](https://github.com/user-attachments/assets/a131ff5d-432c-4041-b111-b9da26cef513)
-
 
 
 <br>
