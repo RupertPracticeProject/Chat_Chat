@@ -33,4 +33,10 @@
   2. 安裝 mingw [點我前往安裝頁面] (https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-posix/sjlj/x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0.7z/download)
   3. 解壓縮後，將 mingw64/bin/ 設定為環境變數
   4. 執行 build.bat
+- 執行 :
+  1. server.exe 伺服端執行檔
+  2. client.exe 客戶端執行檔
+  3. client.exe 上限為五人，可以在 socket_configure.h 修改 connection_limit 變數
+  4. 連接 port 號為 5555，可以在 socket_configure.h 修改
+  5. 目前不支援中文訊息
 
