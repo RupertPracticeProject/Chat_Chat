@@ -22,7 +22,7 @@
 - 1. 於伺服端電腦執行 server.exe，並查明 IP 位址，開放防火牆
 - 2. 於客戶端電腦執行 client.exe，並連線至伺服端電腦 IP 位址，開放防火牆
 - 3. 傳送訊息
-- 4. ![image](https://i.imgur.com/HQbrqeX.gif)
+- 4. https://i.imgur.com/HQbrqeX.gif
      
 <br>
 
