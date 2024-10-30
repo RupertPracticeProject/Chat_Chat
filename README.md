@@ -30,7 +30,7 @@
 
 - 編譯環境 ：
   1. Windows 7 以上作業系統
-  2. 安裝 mingw [點我前往安裝頁面](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-posix/sjlj/x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0.7z/download)
+  2. 安裝 mingw [點我下載](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-posix/sjlj/x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0.7z/download)
   3. 解壓縮後，將 mingw64/bin/ 設定為環境變數
   4. 執行 build.bat
 - 執行 :
