@@ -1,5 +1,6 @@
 #define UNICODE
-#include "socket_configure.h"
+#include "socket_configure.hpp"
+#include "process_char_array.hpp"
 #include <Windows.h>
 #include <iostream>
 #include <thread>
@@ -27,7 +28,7 @@ void connection_server(SOCKET * con_soc, int soc_index)
     {
         recv(con_soc[soc_index], buffer, socket_configure::message_buffer_size, 0);
         cout << "client<" << soc_index << "> : " << buffer << endl;
-        if(buffer[0] == 'e' && buffer[1] == 'n' && buffer[2] == 'd' && buffer[3] == '\0')
+        if(is_end_message(buffer))
         {
             closesocket(con_soc[soc_index]);
             break;

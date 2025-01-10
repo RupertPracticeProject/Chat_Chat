@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 #include <iostream>
-#include "socket_configure.h"
+#include "socket_configure.hpp"
 #include <thread>
 #include <Windows.h>
 #include <map>
@@ -131,7 +131,16 @@ class super_win
                                 char message[socket_configure::message_buffer_size];
                                 size_t s;
                                 wcstombs_s(&s, message, socket_configure::message_buffer_size, wc_message, socket_configure::message_buffer_size);
+                                
+                                
+
+
                                 send(soc, message, socket_configure::message_buffer_size, 0);
+                                if(is_end_message(messsage))
+                                {
+                                    PostQuitMessage(0);
+                                    return 0;
+                                }
                             }
                             else if(name_handle_dict[string("connect")] == (HWND)lparam)
                             {
