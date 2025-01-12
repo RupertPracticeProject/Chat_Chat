@@ -36,7 +36,7 @@
 - 執行 :
   1. server.exe 伺服端執行檔
   2. client.exe 客戶端執行檔
-  3. client.exe 上限為五人，可以在 socket_configure.h 修改 connection_limit 變數
-  4. 連接 port 號為 5555，可以在 socket_configure.h 修改
+  3. client.exe 上限為五人，可以在 socketConfigure.h 修改 connectionLimit 變數
+  4. 連接 port 號為 5555，可以在 socketConfigure.h 修改
   5. 目前不支援中文訊息
 

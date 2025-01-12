@@ -1,6 +1,6 @@
 #define UNICODE
-#include "socket_configure.hpp"
-#include "process_char_array.hpp"
+#include "socketConfigure.hpp"
+#include "processCharArray.hpp"
 #include <Windows.h>
 #include <iostream>
 #include <thread>
@@ -8,43 +8,51 @@ using namespace std;
 
 SOCKET soc;
 
-char message_board[socket_configure::message_buffer_size];
+char messageBoard[SocketConfigure::messageBufferSize];
 
-void connection_server(SOCKET * con_soc, int soc_index)
+void ConnectionServer(SOCKET * conSoc, int socIndex)
 {
     
-    con_soc[soc_index] = accept(soc, 0, 0);
-    if(con_soc[soc_index] == INVALID_SOCKET)
+    conSoc[socIndex] = accept(soc, 0, 0);
+    if(conSoc[socIndex] == INVALID_SOCKET)
     {
         cout << "Accept error, code : " << WSAGetLastError() << endl;
         closesocket(soc);
         WSACleanup();        
         return;
     }
-    char buffer[socket_configure::message_buffer_size];
-    recv(con_soc[soc_index], buffer, socket_configure::message_buffer_size, 0);
+    char buffer[SocketConfigure::messageBufferSize];
+    recv(conSoc[socIndex], buffer, SocketConfigure::messageBufferSize, 0);
 
     while(true)
     {
-        recv(con_soc[soc_index], buffer, socket_configure::message_buffer_size, 0);
-        cout << "client<" << soc_index << "> : " << buffer << endl;
-        if(is_end_message(buffer))
+        recv(conSoc[socIndex], buffer, SocketConfigure::messageBufferSize, 0);
+        cout << "client<" << socIndex << "> : " << buffer << endl;
+        if(IsEndMessage(buffer))
         {
-            closesocket(con_soc[soc_index]);
+            closesocket(conSoc[socIndex]);
             break;
         }
-        int buffer_length = string(buffer).length();
-        int message_board_length = string(message_board).length();
-        message_board[message_board_length] = '\r';
-        message_board[message_board_length + 1] = '\n';
-        for(int i = message_board_length + 2, j = 0; j < buffer_length; ++i, ++j)
+        else if(ParseFileSendingCommand(buffer))
         {
-
-            message_board[i] = buffer[j];
+            closesocket(conSoc[socIndex]);
+            break;
         }
-        for(int i = 0; i < socket_configure::connection_limit; ++i)
+        else
         {
-            send(con_soc[i], message_board, socket_configure::message_buffer_size, 0);
+            int bufferLength = string(buffer).length();
+            int messageBoardLength = string(messageBoard).length();
+            messageBoard[messageBoardLength] = '\r';
+            messageBoard[messageBoardLength + 1] = '\n';
+            for(int i = messageBoardLength + 2, j = 0; j < bufferLength; ++i, ++j)
+            {
+
+                messageBoard[i] = buffer[j];
+            }
+            for(int i = 0; i < SocketConfigure::connectionLimit; ++i)
+            {
+                send(conSoc[i], messageBoard, SocketConfigure::messageBufferSize, 0);
+            }
         }
     }
 }
@@ -53,9 +61,9 @@ void connection_server(SOCKET * con_soc, int soc_index)
 
 int main()
 {
-    for(int i = 0; i < socket_configure::message_buffer_size; ++i)
+    for(int i = 0; i < SocketConfigure::messageBufferSize; ++i)
     {
-        message_board[i] = '\0';
+        messageBoard[i] = '\0';
     }
     WSADATA data;
     ZeroMemory(&data, sizeof(data));
@@ -63,31 +71,31 @@ int main()
 
     if(WSAStartup(version, &data)!=0)
     {
-        cout << "WSA start up error, code : " << WSAGetLastError() << endl;
+        cout << "WSA Start up error, code : " << WSAGetLastError() << endl;
         WSACleanup();
     }
     else
     {
-        cout << "WSA start up success" << endl;
+        cout << "WSA Start up success" << endl;
     }
     
     soc = socket(AF_INET, SOCK_STREAM, 0);
     if(soc == INVALID_SOCKET)
     {
-        cout << "Socket start up error, code : " << WSAGetLastError() << endl;
+        cout << "Socket Start up error, code : " << WSAGetLastError() << endl;
         closesocket(soc);
         WSACleanup();
     }
     else
     {
-        cout << "Socket start up success" << endl;
+        cout << "Socket Start up success" << endl;
     }
-    sockaddr_in bind_addr;
-    bind_addr.sin_port = htons(socket_configure::port);
-    bind_addr.sin_addr.s_addr = inet_addr(socket_configure::get_addr().data());
-    bind_addr.sin_family = AF_INET;
+    sockaddr_in bindAddr;
+    bindAddr.sin_port = htons(SocketConfigure::port);
+    bindAddr.sin_addr.s_addr = inet_addr(SocketConfigure::getAddr().data());
+    bindAddr.sin_family = AF_INET;
     
-    if(bind(soc, reinterpret_cast<SOCKADDR*>(&bind_addr), sizeof(bind_addr)) == SOCKET_ERROR)
+    if(bind(soc, reinterpret_cast<SOCKADDR*>(&bindAddr), sizeof(bindAddr)) == SOCKET_ERROR)
     {
         cout << "Bind error, code : " << WSAGetLastError() << endl;
         closesocket(soc);
@@ -98,7 +106,7 @@ int main()
         cout << "Bind success" << endl;
     }
 
-    if(listen(soc, socket_configure::connection_limit) == SOCKET_ERROR)
+    if(listen(soc, SocketConfigure::connectionLimit) == SOCKET_ERROR)
     {
         cout << "Listening error, code : " << WSAGetLastError() << endl;
         closesocket(soc);
@@ -109,14 +117,14 @@ int main()
         cout << "Listening..." << endl;
     }
     
-    thread server[socket_configure::connection_limit];
-    SOCKET con_soc[socket_configure::connection_limit];
-    for(int i = 0; i < socket_configure::connection_limit; ++i)
+    thread server[SocketConfigure::connectionLimit];
+    SOCKET conSoc[SocketConfigure::connectionLimit];
+    for(int i = 0; i < SocketConfigure::connectionLimit; ++i)
     {
-        server[i] = thread(connection_server, con_soc, i);
+        server[i] = thread(ConnectionServer, conSoc, i);
     }
 
-    for(int i = 0; i < socket_configure::connection_limit; ++i)
+    for(int i = 0; i < SocketConfigure::connectionLimit; ++i)
     {        
         server[i].join();
     }

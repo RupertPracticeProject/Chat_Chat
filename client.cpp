@@ -1,5 +1,5 @@
 #define UNICODE
-#include "super_win.hpp"
+#include "superWin.hpp"
 #include <string>
 #include <iostream>
 #include <string>
@@ -9,13 +9,13 @@ using namespace std;
 
 int main()
 {
-    super_win sw;
-    sw.add_button(
+    SuperWin sw;
+    sw.AddButton(
         string("connect"),
         L"CONNECT"
     );
     
-    sw.add_board(
+    sw.AddBoard(
         string("ip_board"),
         L"IP",
         sw.width*3/20, 
@@ -23,7 +23,7 @@ int main()
         sw.width/20, 
         sw.height/25
     );
-    sw.add_input(
+    sw.AddInput(
         string("ip"),
         L"",
         sw.width*1/5, 
@@ -31,7 +31,7 @@ int main()
         sw.width*3/5, 
         sw.height/25
     );
-    sw.start();
+    sw.Start();
     
     
     return 0;
